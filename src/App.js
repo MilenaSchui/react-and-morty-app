@@ -1,36 +1,56 @@
 import './App.css';
 import styled from 'styled-components';
+import {useState, useEffect} from "react";
 // import Card from './Components/Card/Card';
 
+
 function App() {
+
+  const [dataBase, setDataBase] = useState([])
+  
+  useEffect(() => {
+    async function fetchData(URL){
+    const response = await fetch(URL)
+    const data = await response.json()
+    setDataBase(data["results"])
+    }
+    fetchData("https://rickandmortyapi.com/api/character")
+
+    }, [])
+
+  
+
+  
   return (
     <div className="App">
-      <Header>React and Morty App</Header>     
+      <Headline>React and Morty App</Headline>     
+      
       <Main>
-        <Card>
-        <Image src="https://rickandmortyapi.com/api/character/avatar/2.jpeg"/>
-        <h2>Morty Smith</h2>
-        </Card>
+        {dataBase.map((character) => {
+          return <Card>
+          <Image src={character.image}/>
+          <h2>{character.name}</h2>
+          </Card>
+        })}
+        
       </Main>
       <NavBar>
-        <p>Placeholder</p>
-        <p>Placeholder</p>
-        <p>Placeholder</p>
-        <p>Placeholder</p>
+        <p>Home</p>
+        <p>Favorite</p>
+        <p>Random</p>
+        <p>Other</p>
       </NavBar>
     </div>
   );
 }
 
-
-
 export default App;
 
-const Header = styled.h1`
-  display: flex;
-  justify-content: center;
-  margin-top: 0;  
-  height: 50px;
+const Headline = styled.h1`
+  padding-top: 10px;
+  top: 0;
+  margin: 0;
+  height: 60px;
   width: 100%;
   position: fixed;
   text-transform: lowercase;
@@ -40,11 +60,10 @@ const Header = styled.h1`
 
 const Main = styled.div`
   background: #717C89;
-  height: 1500px;
 `;
 
 const Card = styled.div`
-  border: 1px solid black;
+  // border: 1px solid black;
   width: 80%;
   margin: 10px auto;
   max-width: 400px;
@@ -54,7 +73,8 @@ const Card = styled.div`
 `;
 
 const Image = styled.img`
-  width: 100%; 
+  width: 100%;
+  border: 4px solid #FFFDED;
 `;
 
 const NavBar = styled.footer`
@@ -67,3 +87,4 @@ bottom: 0;
 color: #FFFDED;
 background: #140F2D;
 `;
+
